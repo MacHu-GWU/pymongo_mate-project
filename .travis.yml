@@ -4,13 +4,11 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-before_install:
-  - sudo apt-get install python-numpy python-scipy python-pandas
 install:
   - pip install numpy
   - pip install pandas
   - pip install . # Install it self
-  - pip install --upgrade pytest
+  - pip install --upgrade pytest # Upgrade pytest to lastest
 script: py.test
 notifications:
   slack:

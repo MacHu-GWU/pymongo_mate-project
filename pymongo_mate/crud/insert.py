@@ -17,6 +17,12 @@ except:
     pass
 
 
+__all__ = [
+    "smart_insert",
+    "insert_data_frame",
+]
+
+
 def smart_insert(col, data, minimal_size=5):
     """An optimized Insert strategy.
 

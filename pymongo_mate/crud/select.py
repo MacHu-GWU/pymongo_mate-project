@@ -5,6 +5,13 @@
 pymongo query convenence method.
 """
 
+__all__ = [
+    "select_all",
+    "select_field",
+    "select_distinct_field",
+    "random_sample",
+]
+
 
 def select_all(col):
     """Select all document from collection.

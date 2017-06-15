@@ -5,6 +5,10 @@
 
 """
 
+__all__ = [
+    "upsert_many"
+]
+
 
 def upsert_many(col, data):
     """Only used when having "_id" field.
