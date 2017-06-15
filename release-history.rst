@@ -2,7 +2,7 @@ Release and Version History
 ===========================
 
 0.0.2 (TODO)
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 **Features and Improvements**
 
 **Minor Improvements**
@@ -12,6 +12,8 @@ Release and Version History
 **Miscellaneous**
 
 
-0.0.1 (2016-01-01)
+0.0.1 (2016-06-13)
 ~~~~~~~~~~~~~~~~~~
-- First release
+- First release.
+- Add ``insert``, ``select``, ``update`` module.
+- Add ``query_builder`` module.
