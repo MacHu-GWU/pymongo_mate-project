@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
+import sys
 import pymongo
 import mongomock
+
+py_ver = "%s%s" % (sys.version_info.major, sys.version_info.minor) 
+col_name = "test_col_py%s" % py_ver
 
 try:
     # Create Client
@@ -20,10 +23,11 @@ try:
     db = client.__getattr__("devtest")
 
     # Connect to Collection
-    col_real = db.__getattr__("test_col")
+    col_real = db.__getattr__(col_name)
     col_real.drop()
 except Exception as e:
     col_real = None
 
 # Create Mongomock Client
-col_mock = mongomock.MongoClient().devtest.test_col
+col_mock = mongomock.MongoClient().devtest.__getattr__(col_name)
+col_mock.drop()

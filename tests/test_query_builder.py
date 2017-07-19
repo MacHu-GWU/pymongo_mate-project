@@ -33,6 +33,10 @@ try:
 except:
     pass
 
+try:
+    col.drop_indexes()
+except:
+    pass
 col.create_index([("loc", pymongo.GEOSPHERE)])
 col.create_index([("description", pymongo.TEXT)])
 
