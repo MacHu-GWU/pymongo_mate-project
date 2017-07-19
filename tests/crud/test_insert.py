@@ -15,49 +15,46 @@ if col_real is None:
     warnings.warn(
         "local db are not available, so some aggregation operation are not been tested")
 
-col = col_mock
+col = col_real
+if col is not None:
+    def test_smart_insert():
+        def insert_test_data(col):
+            data = [{"_id": random.randint(1, 1000)} for i in range(20)]
+            for doc in data:
+                try:
+                    col.insert(doc)
+                except:
+                    pass
+            assert 15 <= col.find().count() <= 20
 
-
-def test_smart_insert():
-    col = col_real
-
-    def insert_test_data():
+        data = [{"_id": i} for i in range(1, 1 + 1000)]
+        # Smart Insert
         col.remove({})
+        insert_test_data(col)
 
-        data = [{"_id": random.randint(1, 1000)} for i in range(20)]
+        st = time.clock()
+        smart_insert(col, data)
+        elapse1 = time.clock() - st
+
+        # after smart insert, we got 1000 doc
+        assert col.find().count() == 1000
+
+        # Regular Insert
+        col.remove({})
+        insert_test_data(col)
+
+        st = time.clock()
         for doc in data:
             try:
                 col.insert(doc)
             except:
                 pass
-        assert 15 <= col.find().count() <= 20
+        elapse2 = time.clock() - st
 
-    data = [{"_id": i} for i in range(1, 1 + 1000)]
-    # Smart Insert
-    insert_test_data()
+        # after regular insert, we got 1000 doc
+        assert col.find().count() == 1000
 
-    st = time.clock()
-    smart_insert(col, data)
-    elapse1 = time.clock() - st
-
-    # after smart insert, we got 1000 doc
-    assert col.find().count() == 1000
-
-    # Regular Insert
-    insert_test_data()
-
-    st = time.clock()
-    for doc in data:
-        try:
-            col.insert(doc)
-        except:
-            pass
-    elapse2 = time.clock() - st
-
-    # after regular insert, we got 1000 doc
-    assert col.find().count() == 1000
-
-    assert elapse1 <= elapse2
+        assert elapse1 <= elapse2
 
 
 try:
@@ -65,6 +62,7 @@ try:
     import pandas as pd
 
     def test_insert_data_frame():
+        col = col_mock
         col.remove({})
 
         data = [

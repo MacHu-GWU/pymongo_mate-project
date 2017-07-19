@@ -13,7 +13,7 @@ if col_real is None:
         "local db are not available, so some aggregation operation are not been tested")
 
 
-def insert_4_data():
+def insert_4_data(col):
     col.remove({})
     data = [
         {"_id": 0, "v": 0},
@@ -24,7 +24,7 @@ def insert_4_data():
     col.insert(data)
 
 
-def insert_1000_a_b_c_data():
+def insert_1000_a_b_c_data(col):
     col.remove({})
 
     data = list()
@@ -38,7 +38,8 @@ def insert_1000_a_b_c_data():
 
 
 def test_selelct_field():
-    insert_4_data()
+    col = col_mock
+    insert_4_data(col)
 
     header, data = select_field(col, "_id")
     assert header == "_id"
@@ -53,7 +54,7 @@ def test_selelct_field():
 col = col_real
 if col is not None:
     def test_select_distinct():
-        insert_1000_a_b_c_data()
+        insert_1000_a_b_c_data(col)
 
         assert select_distinct_field(col, "a") == list(range(10))
         assert len((select_distinct_field(col, ["a", "b"]))) == 100
@@ -71,7 +72,7 @@ if col is not None:
         ) == 500
 
     def test_random_sample():
-        insert_1000_a_b_c_data()
+        insert_1000_a_b_c_data(col)
 
         assert len(random_sample(col, 5)) == 5
 
