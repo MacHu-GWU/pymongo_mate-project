@@ -45,7 +45,7 @@ def test_selelct_field():
     assert data == [0, 1, 2, 3]
 
     headers, data = select_field(
-        col, "_id", "v", filters={"_id": {"$gte": 2}})
+        col, ["_id", "v"], filters={"_id": {"$gte": 2}})
     assert headers == ["_id", "v"]
     assert data == [[2, 2], [3, 3]]
 
@@ -56,17 +56,17 @@ if col is not None:
         insert_1000_a_b_c_data()
 
         assert select_distinct_field(col, "a") == list(range(10))
-        assert len((select_distinct_field(col, "a", "b"))) == 100
-        assert len((select_distinct_field(col, "a", "b", "c"))) == 1000
+        assert len((select_distinct_field(col, ["a", "b"]))) == 100
+        assert len((select_distinct_field(col, ["a", "b", "c"]))) == 1000
 
         assert select_distinct_field(
             col, "a", filters={"a": {"$gte": 5}}) == list(range(5, 10))
         assert len(
-            select_distinct_field(col, "a", "b", filters={"a": {"$gte": 5}})
+            select_distinct_field(col, ["a", "b"], filters={"a": {"$gte": 5}})
         ) == 50
         assert len(
             select_distinct_field(
-                col, "a", "b", "c", filters={"a": {"$gte": 5}}
+                col, ["a", "b", "c"], filters={"a": {"$gte": 5}}
             )
         ) == 500
 

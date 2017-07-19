@@ -5,6 +5,12 @@
 pymongo query convenence method.
 """
 
+try:
+    from ..pkg.sixmini import string_types
+except:
+    from pymongo_mate.pkg.sixmini import string_types
+
+
 __all__ = [
     "select_all",
     "select_field",
@@ -19,20 +25,30 @@ def select_all(col):
     return list(col.find())
 
 
-def select_field(col, *fields, filters=None):
+def _preprocess_field_or_fields(field_or_fields):
+    if isinstance(field_or_fields, string_types):
+        field_or_fields = [field_or_fields, ]
+    elif isinstance(field_or_fields, (tuple, list)):
+        pass
+    return field_or_fields
+
+
+def select_field(col, field_or_fields, filters=None):
     """Select single or multiple fields.
 
-    :params fields: list of str
+    :params field_or_fields: str or list of str
     :returns headers: headers
     :return data: list of row
 
     **中文文档**
 
-    - 在选择单列时, 返回的是 str, list
-    - 在选择多列时, 返回的是 str list, list of list
+    - 在选择单列时, 返回的是 str, list.
+    - 在选择多列时, 返回的是 str list, list of list.
 
     返回单列或多列的数据。
     """
+    fields = _preprocess_field_or_fields(field_or_fields)
+
     if filters is None:
         filters = dict()
 
@@ -49,17 +65,19 @@ def select_field(col, *fields, filters=None):
         return headers, data
 
 
-def select_distinct_field(col, *fields, filters=None):
+def select_distinct_field(col, field_or_fields, filters=None):
     """Select distinct value or combination of values of 
     single or multiple fields.
 
-    :params fields: list of str
-    :return data: list of list
+    :params fields: str or list of str.
+    :return data: list of list.
 
     **中文文档**
 
     选择多列中出现过的所有可能的排列组合。
     """
+    fields = _preprocess_field_or_fields(field_or_fields)
+
     if filters is None:
         filters = dict()
 
