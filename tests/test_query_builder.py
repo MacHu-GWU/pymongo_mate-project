@@ -74,6 +74,15 @@ def test_geo2dsphere():
           Geo2DSphere.near(39.08, -77.14, max_dist=100000, unit_miles=False))
 
 
+def test_exists():
+    _test("score", exists(True))
+    _test("score", is_exists)
+
+
+def test_mod():
+    _test("score", mod(3, 1))
+
+
 def test_type():
     _test("score", type_is(TypeCode.Integer32))
     _test("score", type_is(TypeCode.Number))

@@ -235,18 +235,29 @@ class Geo2DSphere(object):
 
 
 def exists(true_or_false):
+    """Test if a field exists.
+    """
     return {"$exists": true_or_false}
 
 
 is_exists = {"$exists": True}
+"""Match a field exists.
+"""
+
 is_not_exists = {"$exists": False}
+"""Match a field not exists.
+"""
 
 
 def mod(divisor, remainder):
+    """Test mod(<divisor>) is <remainder>.
+    """
     return {"$mod": [divisor, remainder]}
 
 
 class TypeCode(object):
+    """MongoDB Bson type code.
+    """
     Double = 1
     String = 2
     Object = 3
@@ -272,4 +283,6 @@ class TypeCode(object):
 
 
 def type_is(type_code):
+    """Test field type is certain type.
+    """
     return {"$type": type_code}

@@ -8,8 +8,8 @@ import mongomock
 try:
     # Create Client
     # local
-#     client = pymongo.MongoClient(
-#         "localhost", 27017, serverSelectionTimeoutMS=1000)
+    #     client = pymongo.MongoClient(
+    #         "localhost", 27017, serverSelectionTimeoutMS=1000)
 
     # mlab cloud
     url = "mongodb://{dbuser}:{dbpassword}@ds113063.mlab.com:13063/devtest".\
