@@ -37,6 +37,7 @@ class UTC(tzinfo):
     def dst(self, dt):
         return ZERO
 
+
 utc = UTC()
 
 
@@ -85,8 +86,9 @@ class Rolex(object):
         该方法要快过 :meth:`dateutil.parser.parse` 方法。
         """
         if datestr is None:
-            raise ValueError("Parser must be a string or character stream, not NoneType")
-        
+            raise ValueError(
+                "Parser must be a string or character stream, not NoneType")
+
         # try default date template
         try:
             return datetime.strptime(
@@ -105,7 +107,7 @@ class Rolex(object):
 
         # raise error
         raise Exception("Unable to parse date from: %r" % datestr)
-            
+
     def _str2datetime(self, datetimestr):
         """Parse datetime from string. If no template matches this string,
         raise Error. Please go
@@ -126,8 +128,9 @@ class Rolex(object):
         该方法要快过 :meth:`dateutil.parser.parse` 方法。
         """
         if datetimestr is None:
-            raise ValueError("Parser must be a string or character stream, not NoneType")
-            
+            raise ValueError(
+                "Parser must be a string or character stream, not NoneType")
+
         # try default datetime template
         try:
             return datetime.strptime(
@@ -147,11 +150,11 @@ class Rolex(object):
         # raise error
         dt = parser.parse(datetimestr)
         self.str2datetime = parser.parse
-        
+
         return dt
-        
+
     str2datetime = _str2datetime
-    
+
     def parse_date(self, value):
         """A lazy method to parse anything to date.
 
@@ -863,5 +866,6 @@ class Rolex(object):
             return start, end
         else:
             return str(start), str(end)
+
 
 rolex = Rolex()

@@ -9,33 +9,48 @@ import re
 
 
 class Comparison(object):
-
+    """``==``, ``!=``, ``>``, ``>=``, ``<``, ``<=``.
+    """
     @staticmethod
     def less_than_equal(value):
+        """``<=``
+        """
         return {"$lte": value}
 
     @staticmethod
     def less_than(value):
+        """``<``
+        """
         return {"$lt": value}
 
     @staticmethod
     def greater_than_equal(value):
+        """``>=``
+        """
         return {"$gte": value}
 
     @staticmethod
     def greater_than(value):
+        """``>``
+        """
         return {"$gt": value}
 
     @staticmethod
     def euqal_to(value):
+        """``==``
+        """
         return {"$eq": value}
 
     @staticmethod
     def not_equal_to(value):
+        """``!=``
+        """
         return {"$ne": value}
 
 
 class Lang(object):
+    """Language code.
+    """
     English = "en"
     French = "fr"
     German = "de"
@@ -48,7 +63,13 @@ class Lang(object):
 
 
 class Text(object):
+    """Search text by:
 
+    - startswith
+    - endswith
+    - contain sub string
+    - full text serach
+    """
     @staticmethod
     def startswith(text, ignore_case=True):
         """Test if a string-field start with ``text``.
@@ -104,7 +125,8 @@ class Text(object):
 
 
 class Array(object):
-
+    """Array query builder.
+    """
     @staticmethod
     def element_match(filters):
         """Test if any of items match the criterion.
@@ -189,10 +211,13 @@ class Array(object):
 
 
 class Geo2DSphere(object):
-
+    """Geosphere query builder.
+    """
     @staticmethod
     def near(lat, lng, max_dist=None, unit_miles=False):
-        """
+        """Find document near a point.
+
+        For example:: find all document with in 25 miles radius from 32.0, -73.0.
         """
         filters = {
             "$nearSphere": {
@@ -209,63 +234,42 @@ class Geo2DSphere(object):
         return filters
 
 
-if __name__ == "__main__":
-    import pymongo
-    from pymongo_mate.tests import col
+def exists(true_or_false):
+    return {"$exists": true_or_false}
 
-    data = [
-        {
-            "_id": 1,
-            "score": 10,
-            "value": 3.14,
-            "array": [3, 4, 5],
-            "path": r"C:\Users\admin",
-            "description": "$text performs a text search on the content of the fields indexed with a text index.",
-            "loc": {"type": "Point", "coordinates": [-77.142901, 39.074373]},
-        },
-    ]
-    try:
-        col.insert(data)
-    except:
-        pass
 
-    col.create_index([("loc", pymongo.GEOSPHERE)])
-    col.create_index([("description", pymongo.TEXT)])
+is_exists = {"$exists": True}
+is_not_exists = {"$exists": False}
 
-    def _test(field, filters):
-        assert len(list(col.find({field: filters}))) == 1
 
-    def test_operator():
-        _test("value", Comparison.euqal_to(3.14))
-        _test("value", Comparison.not_equal_to(1.414))
-        _test("value", Comparison.greater_than(3))
-        _test("value", Comparison.greater_than_equal(3.14))
-        _test("value", Comparison.less_than(4))
-        _test("value", Comparison.less_than_equal(3.14))
+def mod(divisor, remainder):
+    return {"$mod": [divisor, remainder]}
 
-    test_operator()
 
-    def test_text():
-        _test("path", Text.startswith("C:\\"))
-        _test("path", Text.endswith("admin"))
-        _test("path", Text.contains(r":\user"))
-        assert len(list(col.find(Text.fulltext("text index")))) == 1
+class TypeCode(object):
+    Double = 1
+    String = 2
+    Object = 3
+    Array = 4
+    Binary_Data = 5
+    Undefined = 6  # Deprecated
+    ObjectId = 7
+    Boolean = 8
+    Date = 9
+    Null = 10
+    Regular_Expression = 11
+    DBPointer = 12  # Deprecated
+    JavaScript = 13
+    Symbol = 14  # Deprecated
+    JavaScript_with_Scope = 15
+    Integer32 = 16
+    TimeStamp = 17
+    Integer64 = 18
+    Decimal128 = 19
+    MinKey = -1
+    MaxKey = 127
+    Number = "number"
 
-    test_text()
 
-    def test_array():
-        _test("score", Array.item_in([10, 11]))
-        _test("score", Array.item_not_in([8, 9]))
-
-        _test("array", Array.include_all([3, 5]))
-        _test("array", Array.include_any([1, 5, 9]))
-        _test("array", Array.exclude_all([1, 2]))
-        _test("array", Array.exclude_any([1, 2, 3]))
-
-    test_array()
-
-    def test_geo2dsphere():
-        _test("loc",
-              Geo2DSphere.near(39.08, -77.14, max_dist=100000, unit_miles=False))
-
-    test_geo2dsphere()
+def type_is(type_code):
+    return {"$type": type_code}

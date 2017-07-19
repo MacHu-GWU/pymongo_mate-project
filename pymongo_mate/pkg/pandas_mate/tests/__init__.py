@@ -5,11 +5,12 @@ import numpy as np
 import pandas as pd
 from sfm import rnd
 
+
 def create_test_df(n_rows):
     """
-    
+
     **中文文档**
-    
+
     创建一个 ``n_rows`` 行的测试用DataFrame。
     """
     df = pd.DataFrame()

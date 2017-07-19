@@ -138,5 +138,6 @@ def from_html_one(html_code, **kwargs):
     try:
         assert len(tables) == 1
     except AssertionError:
-        raise Exception("More than one <table> in provided HTML code!  Use from_html instead.")
+        raise Exception(
+            "More than one <table> in provided HTML code!  Use from_html instead.")
     return tables[0]

@@ -25,13 +25,13 @@ def count_lines(abspath):
         return i
 
 
-def read_csv_arg_preprocess(abspath, memory_usage=100*1000*1000):
+def read_csv_arg_preprocess(abspath, memory_usage=100 * 1000 * 1000):
     """Automatically decide if we need to use iterator mode to read a csv file.
 
     :param abspath: csv file absolute path.
     :param memory_usage: max memory will be used for pandas.read_csv().
     """
-    if memory_usage < 1000*1000:
+    if memory_usage < 1000 * 1000:
         raise ValueError("Please specify a valid memory usage for read_csv, "
                          "the value should larger than 1MB and less than "
                          "your available memory.")

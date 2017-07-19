@@ -22,12 +22,12 @@ def smart_insert(df, table, engine, minimal_size=5):
     好数据存入数据库的方法。
     """
     from sqlalchemy.exc import IntegrityError
-    
+
     try:
         table_name = table.name
     except:
         table_name = table
-    
+
     # 首先进行尝试bulk insert
     try:
         df.to_sql(table_name, engine, index=False, if_exists="append")
@@ -85,7 +85,7 @@ def excel_to_sql(excel_file_path, engine,
             excel_file_path, sheet_name,
             **read_excel_kwargs.get(sheet_name, dict())
         )
-        
+
         kwargs = to_generic_type_kwargs.get(sheet_name)
         if kwargs:
             data = to_dict_list_generic_type(df, **kwargs)
@@ -99,19 +99,19 @@ def excel_to_sql(excel_file_path, engine,
 
 def database_to_excel(engine, excel_file_path):
     """Export database to excel.
-    
+
     :param engine: 
     :param excel_file_path:
     """
     from sqlalchemy import MetaData, select
-    
+
     metadata = MetaData()
     metadata.reflect(engine)
-    
+
     writer = pd.ExcelWriter(excel_file_path)
     for table in metadata.tables.values():
         sql = select([table])
         df = pd.read_sql(sql, engine)
         df.to_excel(writer, table.name, index=False)
-    
+
     writer.save()
