@@ -19,10 +19,12 @@ col = col_mock
 
 
 def test_smart_insert():
+    col = col_real
+
     def insert_test_data():
         col.remove({})
 
-        data = [{"_id": random.randint(1, 10000)} for i in range(20)]
+        data = [{"_id": random.randint(1, 1000)} for i in range(20)]
         for doc in data:
             try:
                 col.insert(doc)
@@ -30,7 +32,7 @@ def test_smart_insert():
                 pass
         assert 15 <= col.find().count() <= 20
 
-    data = [{"_id": i} for i in range(1, 1 + 10000)]
+    data = [{"_id": i} for i in range(1, 1 + 1000)]
     # Smart Insert
     insert_test_data()
 
@@ -38,8 +40,8 @@ def test_smart_insert():
     smart_insert(col, data)
     elapse1 = time.clock() - st
 
-    # after smart insert, we got 10000 doc
-    assert col.find().count() == 10000
+    # after smart insert, we got 1000 doc
+    assert col.find().count() == 1000
 
     # Regular Insert
     insert_test_data()
@@ -52,8 +54,8 @@ def test_smart_insert():
             pass
     elapse2 = time.clock() - st
 
-    # after regular insert, we got 10000 doc
-    assert col.find().count() == 10000
+    # after regular insert, we got 1000 doc
+    assert col.find().count() == 1000
 
     assert elapse1 <= elapse2
 
@@ -86,7 +88,8 @@ try:
         assert data[0][5] == res[0]["bool"]
         assert data[0][6] == res[0]["null"]
 except ImportError:
-    pass
+    raise
+    warnings.warn("insert_data_frame() are not tested!")
 
 
 if __name__ == "__main__":
