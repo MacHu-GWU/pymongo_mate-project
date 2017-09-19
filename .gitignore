@@ -1,3 +1,9 @@
+# User Settings
+pymongo_mate_venv/
+pymongo_mate.egg-info/
+pymongo_mate-*/
+index.rst
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

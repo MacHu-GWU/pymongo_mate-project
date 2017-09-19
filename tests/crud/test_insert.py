@@ -7,7 +7,6 @@ import warnings
 from datetime import datetime
 
 import pytest
-from pytest import approx
 from pymongo_mate.crud.insert import *
 from pymongo_mate.tests import col_real, col_mock
 
@@ -18,16 +17,19 @@ if col_real is None:
 col = col_real
 if col is not None:
     def test_smart_insert():
+        init_n = 5
+        total_n = 400
+
         def insert_test_data(col):
-            data = [{"_id": random.randint(1, 1000)} for i in range(20)]
+            data = [{"_id": random.randint(1, total_n)} for i in range(init_n)]
             for doc in data:
                 try:
                     col.insert(doc)
                 except:
                     pass
-            assert 15 <= col.find().count() <= 20
+            assert col.find().count() <= init_n
 
-        data = [{"_id": i} for i in range(1, 1 + 1000)]
+        data = [{"_id": i} for i in range(1, 1 + total_n)]
         # Smart Insert
         col.remove({})
         insert_test_data(col)
@@ -36,8 +38,8 @@ if col is not None:
         smart_insert(col, data)
         elapse1 = time.clock() - st
 
-        # after smart insert, we got 1000 doc
-        assert col.find().count() == 1000
+        # after smart insert, we got total_n doc
+        assert col.find().count() == total_n
 
         # Regular Insert
         col.remove({})
@@ -51,8 +53,8 @@ if col is not None:
                 pass
         elapse2 = time.clock() - st
 
-        # after regular insert, we got 1000 doc
-        assert col.find().count() == 1000
+        # after regular insert, we got total_n doc
+        assert col.find().count() == total_n
 
         assert elapse1 <= elapse2
 
@@ -86,10 +88,12 @@ try:
         assert data[0][5] == res[0]["bool"]
         assert data[0][6] == res[0]["null"]
 except ImportError:
-    raise
     warnings.warn("insert_data_frame() are not tested!")
+    pass
 
 
 if __name__ == "__main__":
     import os
-    pytest.main([os.path.basename(__file__), "--tb=native", "-s", ])
+
+    basename = os.path.basename(__file__)
+    pytest.main([basename, "-s", "--tb=native"])

@@ -8,48 +8,97 @@ This module helps user to build pymongo query dict.
 import re
 
 
+class Logic(object):
+    @staticmethod
+    def and_(*filters):
+        return {"$and": list(filters)}
+
+    @staticmethod
+    def or_(*filters):
+        return {"$or": list(filters)}
+
+    @staticmethod
+    def nor(*filters):
+        return {"$nor": list(filters)}
+
+    @staticmethod
+    def not_(expression):
+        return {"$not": expression}
+
+
 class Comparison(object):
     """``==``, ``!=``, ``>``, ``>=``, ``<``, ``<=``.
     """
     @staticmethod
     def less_than_equal(value):
-        """``<=``
+        """
+        ``<=``
+
+        Example::
+
+            filters = {field: Comparison.less_than_equal(10)}
         """
         return {"$lte": value}
 
     @staticmethod
     def less_than(value):
-        """``<``
+        """
+        ``<``
+
+        Example::
+
+            filters = {field: Comparison.less_than(10)}
         """
         return {"$lt": value}
 
     @staticmethod
     def greater_than_equal(value):
-        """``>=``
+        """
+        ``>=``
+
+        Example::
+
+            filters = {field: Comparison.greater_than_equal(10)}
         """
         return {"$gte": value}
 
     @staticmethod
     def greater_than(value):
-        """``>``
+        """
+        ``>``
+
+        Example::
+
+            filters = {field: Comparison.greater_than(10)}
         """
         return {"$gt": value}
 
     @staticmethod
-    def euqal_to(value):
-        """``==``
+    def equal_to(value):
+        """
+        ``==``
+
+        Example::
+
+            filters = {field: Comparison.equal_to(10)}
         """
         return {"$eq": value}
 
     @staticmethod
     def not_equal_to(value):
-        """``!=``
+        """
+        ``!=``
+
+        Example::
+
+            filters = {field: Comparison.not_equal_to(10)}
         """
         return {"$ne": value}
 
 
 class Lang(object):
-    """Language code.
+    """
+    Language code Collection.
     """
     English = "en"
     French = "fr"
@@ -72,36 +121,51 @@ class Text(object):
     """
     @staticmethod
     def startswith(text, ignore_case=True):
-        """Test if a string-field start with ``text``.
+        """
+        Test if a string-field start with ``text``.
+
+        Example::
+
+            filters = {"path": Text.startswith(r"C:\\")}
         """
         if ignore_case:
             compiled = re.compile(
                 "^%s" % text.replace("\\", "\\\\"), re.IGNORECASE)
-        else:
+        else:  # pragma: no cover
             compiled = re.compile("^%s" % text.replace("\\", "\\\\"))
 
         return {"$regex": compiled}
 
     @staticmethod
     def endswith(text, ignore_case=True):
-        """Test if a string-field end with ``text``.
+        """
+        Test if a string-field end with ``text``.
+
+        Example::
+
+            filters = {"path": Text.endswith(".exe")}
         """
         if ignore_case:
             compiled = re.compile(
                 "%s$" % text.replace("\\", "\\\\"), re.IGNORECASE)
-        else:
+        else:  # pragma: no cover
             compiled = re.compile("%s$" % text.replace("\\", "\\\\"))
 
         return {"$regex": compiled}
 
     @staticmethod
     def contains(text, ignore_case=True):
-        """Test if a string-field has substring of ``text``.
+        """
+        Test if a string-field has substring of ``text``.
+
+        Example::
+
+            filters = {"path": Text.contains("pymongo_mate")}
         """
         if ignore_case:
             compiled = re.compile(
                 "%s" % text.replace("\\", "\\\\"), re.IGNORECASE)
-        else:
+        else:  # pragma: no cover
             compiled = re.compile("%s" % text.replace("\\", "\\\\"))
 
         return {"$regex": compiled}
@@ -109,6 +173,10 @@ class Text(object):
     @staticmethod
     def fulltext(search, lang=Lang.English, ignore_case=True):
         """Full text search.
+
+        Example::
+
+            filters = Text.fulltext("python pymongo_mate")
 
         .. note::
 
@@ -129,7 +197,8 @@ class Array(object):
     """
     @staticmethod
     def element_match(filters):
-        """Test if any of items match the criterion.
+        """
+        Test if any of items match the criterion.
 
         Example::
 
@@ -139,12 +208,18 @@ class Array(object):
             ]
 
             filters = {"results": {"$elemMatch": {"$gte": 80, "$lt": 85 }}}
+
+            # equals to
+            filters = {
+                "results": Array.element_match({"$gte": 80, })
+            }
         """
         return {"$elemMatch": filters}
 
     @staticmethod
     def include_all(items):
-        """Test if an array-like field include all these items.
+        """
+        Test if an array-like field include all these items.
 
         Example::
 
@@ -154,7 +229,8 @@ class Array(object):
 
     @staticmethod
     def include_any(items):
-        """Test if an array-like field include any of these items.
+        """
+        Test if an array-like field include any of these items.
 
         Example::
 
@@ -164,7 +240,8 @@ class Array(object):
 
     @staticmethod
     def exclude_all(items):
-        """Test if an array-like field doesn't include any of these items.
+        """
+        Test if an array-like field doesn't include any of these items.
 
         Example::
 
@@ -174,7 +251,8 @@ class Array(object):
 
     @staticmethod
     def exclude_any(items):
-        """Test if an array-like field doesn't include at lease one of 
+        """
+        Test if an array-like field doesn't include at lease one of
         these items.
 
         Example::
@@ -185,7 +263,8 @@ class Array(object):
 
     @staticmethod
     def item_in(items):
-        """Single item is in item sets.
+        """
+        Single item is in item sets.
 
         Example::
 
@@ -195,7 +274,8 @@ class Array(object):
 
     @staticmethod
     def item_not_in(items):
-        """Single item is not in item sets.
+        """
+        Single item is not in item sets.
 
         Example::
 
@@ -205,7 +285,12 @@ class Array(object):
 
     @staticmethod
     def size(n):
-        """Test if size of an array-like field is n.
+        """
+        Test if size of an array-like field is n.
+
+        Example::
+
+            filters = {"cart.items": Array.size(3)}
         """
         return {"$size": n}
 
@@ -228,7 +313,7 @@ class Geo2DSphere(object):
             }
         }
         if max_dist:
-            if unit_miles:
+            if unit_miles:  # pragma: no cover
                 max_dist = max_dist / 1609.344
             filters["$nearSphere"]["$maxDistance"] = max_dist
         return filters

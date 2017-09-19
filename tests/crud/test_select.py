@@ -37,6 +37,15 @@ def insert_1000_a_b_c_data(col):
     col.insert(data)
 
 
+def test_select_all():
+    col = col_mock
+    insert_4_data(col_mock)
+    data = select_all(col)
+
+    assert len(data) == 4
+    assert [doc["_id"] for doc in data] == [0, 1, 2, 3]
+
+
 def test_selelct_field():
     col = col_mock
     insert_4_data(col)
@@ -84,4 +93,6 @@ if col is not None:
 
 if __name__ == "__main__":
     import os
-    pytest.main([os.path.basename(__file__), "--tb=native", "-s", ])
+
+    basename = os.path.basename(__file__)
+    pytest.main([basename, "-s", "--tb=native"])

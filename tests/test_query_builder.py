@@ -46,7 +46,7 @@ def _test(field, filters):
 
 
 def test_operator():
-    _test("value", Comparison.euqal_to(3.14))
+    _test("value", Comparison.equal_to(3.14))
     _test("value", Comparison.not_equal_to(1.414))
     _test("value", Comparison.greater_than(3))
     _test("value", Comparison.greater_than_equal(3.14))
@@ -72,6 +72,8 @@ def test_array():
     _test("array", Array.exclude_all([1, 2]))
     _test("array", Array.exclude_any([1, 2, 3]))
 
+    _test("array", Array.size(3))
+
 
 def test_geo2dsphere():
     _test("loc",
@@ -92,11 +94,50 @@ def test_type():
     _test("score", type_is(TypeCode.Number))
     _test("value", type_is(TypeCode.Double))
     _test("value", type_is(TypeCode.Number))
-#     _test("array", type_is(TypeCode.Array)) # 不知道为什么不成功
+    #     _test("array", type_is(TypeCode.Array)) # 不知道为什么不成功
     _test("description", type_is(TypeCode.String))
     _test("datetime", type_is(TypeCode.Date))
 
 
+class TestLogic(object):
+    def test_and(self):
+        filters = Logic.and_(
+            {"value": Comparison.greater_than(3)},
+            {"value": Comparison.less_than(4)},
+        )
+        assert col.find(filters).count() == 1
+
+        filters = {
+            "data": Array.element_match(
+                Logic.and_(
+                    {"v": Comparison.greater_than(1.5)},
+                    {"v": Comparison.less_than(2.5)},
+                )
+            )
+        }
+        assert col.find(filters).count() == 1
+
+    def test_or(self):
+        filters = Logic.or_(
+            {"value": Comparison.greater_than(3)},
+            {"value": Comparison.less_than(2)},
+        )
+        assert col.find(filters).count() == 1
+
+    def test_nor(self):
+        filters = Logic.nor(
+            {"value": Comparison.greater_than(4)},
+            {"value": Comparison.less_than(3)},
+        )
+        assert col.find(filters).count() == 1
+
+    def test_not(self):
+        filters = {"value": Logic.not_(Comparison.equal_to(100))}
+        assert col.find(filters).count() == 1
+
+
 if __name__ == "__main__":
     import os
-    pytest.main([os.path.basename(__file__), "--tb=native", "-s", ])
+
+    basename = os.path.basename(__file__)
+    pytest.main([basename, "-s", "--tb=native"])

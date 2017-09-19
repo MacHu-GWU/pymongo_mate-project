@@ -5,7 +5,7 @@ import math
 import pymongo
 try:
     from ..utils import grouper_list
-except:
+except:  # pragma: no cover
     from pymongo_mate.utils import grouper_list
 
 try:
@@ -13,7 +13,7 @@ try:
         from .pkg.pandas_mate import transform
     except:
         from pymongo_mate.pkg.pandas_mate import transform
-except:
+except:  # pragma: no cover
     pass
 
 
@@ -60,7 +60,7 @@ def smart_insert(col, data, minimal_size=5):
                         col.insert(doc)
                     except pymongo.errors.DuplicateKeyError:
                         pass
-    else:
+    else:  # pragma: no cover
         try:
             col.insert(data)
         except pymongo.errors.DuplicateKeyError:

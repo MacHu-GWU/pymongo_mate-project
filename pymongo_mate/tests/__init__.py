@@ -5,7 +5,7 @@ import sys
 import pymongo
 import mongomock
 
-py_ver = "%s%s" % (sys.version_info.major, sys.version_info.minor) 
+py_ver = "%s%s" % (sys.version_info.major, sys.version_info.minor)
 col_name = "test_col_py%s" % py_ver
 
 try:
