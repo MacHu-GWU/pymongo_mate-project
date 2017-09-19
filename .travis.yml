@@ -1,16 +1,22 @@
 language: python
+
 python:
   - "2.7"
   - "3.4"
   - "3.5"
+  - "3.6"
+
 install:
-  - pip install numpy
-  - pip install pandas
-  - pip install mongomock
-  - pip install . # Install it self
+  - pip install --editable . # Install it self
   - pip install --upgrade pytest # Upgrade pytest to lastest
-script: py.test
+  - pip install --upgrade pytest-cov # Upgrade pytest-cov to latest
+  - pip install codecov # Install coveralls
+
+script:
+  - pytest tests --cov=pymongo_mate # Run unittest
+
 notifications:
-  slack:
-    on_success: never
-    on_failure: never
+  email: false # Mute email notification
+
+after_success:
+  - codecov # travis-ci will transfer data to codecov after success

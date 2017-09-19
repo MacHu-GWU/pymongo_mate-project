@@ -7,7 +7,7 @@ pymongo query convenence method.
 
 try:
     from ..pkg.sixmini import string_types
-except:
+except:  # pragma: no cover
     from pymongo_mate.pkg.sixmini import string_types
 
 
@@ -66,7 +66,7 @@ def select_field(col, field_or_fields, filters=None):
 
 
 def select_distinct_field(col, field_or_fields, filters=None):
-    """Select distinct value or combination of values of 
+    """Select distinct value or combination of values of
     single or multiple fields.
 
     :params fields: str or list of str.

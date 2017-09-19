@@ -11,6 +11,8 @@ sub packages and modules
    :maxdepth: 1
 
     crud <crud/__init__>
+    tests <tests/__init__>
+    mongomock_mate <mongomock_mate>
     query_builder <query_builder>
     utils <utils>
     
