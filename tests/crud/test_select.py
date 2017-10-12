@@ -38,8 +38,8 @@ def insert_1000_a_b_c_data(col):
 
 
 def test_select_all():
-    col = col_mock
-    insert_4_data(col_mock)
+    col = col_real
+    insert_4_data(col)
     data = select_all(col)
 
     assert len(data) == 4
@@ -47,7 +47,7 @@ def test_select_all():
 
 
 def test_selelct_field():
-    col = col_mock
+    col = col_real
     insert_4_data(col)
 
     header, data = select_field(col, "_id")

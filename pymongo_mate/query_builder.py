@@ -371,3 +371,13 @@ def type_is(type_code):
     """Test field type is certain type.
     """
     return {"$type": type_code}
+
+
+class PipeLine(object):
+    @staticmethod
+    def random_sample(filters=None, n=5):
+        pipeline = list()
+        if filters is not None:
+            pipeline.append({"$match": filters})
+        pipeline.append({"$sample": {"size": n}})
+        return pipeline

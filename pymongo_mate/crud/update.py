@@ -11,7 +11,8 @@ __all__ = [
 
 
 def upsert_many(col, data):
-    """Only used when having "_id" field.
+    """
+    Only used when having "_id" field.
 
     **中文文档**
 
@@ -21,6 +22,7 @@ def upsert_many(col, data):
     ready_to_insert = list()
     for doc in data:
         res = col.update({"_id": doc["_id"]}, {"$set": doc}, upsert=False)
-        if not res["nModified"]:
+        # 没有任何数据被修改, 且不是因为数据存在但值相同
+        if res["nModified"] == 0 and res["updatedExisting"] is False:
             ready_to_insert.append(doc)
     col.insert(ready_to_insert)

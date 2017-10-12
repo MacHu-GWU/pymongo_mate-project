@@ -64,7 +64,7 @@ try:
     import pandas as pd
 
     def test_insert_data_frame():
-        col = col_mock
+        col = col_real
         col.remove({})
 
         data = [

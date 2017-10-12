@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 __short_description__ = "A library extend pymongo module, makes CRUD easier, and more."
 __license__ = "MIT"
 __author__ = "Sanhe Hu"
@@ -16,5 +16,5 @@ try:
     from .crud.select import *
     from .crud.update import *
     from .query_builder import *
-except:  # pragma: no cover
+except ImportError:  # pragma: no cover
     pass

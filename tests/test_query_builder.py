@@ -94,7 +94,7 @@ def test_type():
     _test("score", type_is(TypeCode.Number))
     _test("value", type_is(TypeCode.Double))
     _test("value", type_is(TypeCode.Number))
-    #     _test("array", type_is(TypeCode.Array)) # 不知道为什么不成功
+    # _test("array", type_is(TypeCode.Array)) # 不知道为什么不成功
     _test("description", type_is(TypeCode.String))
     _test("datetime", type_is(TypeCode.Date))
 
@@ -134,6 +134,18 @@ class TestLogic(object):
     def test_not(self):
         filters = {"value": Logic.not_(Comparison.equal_to(100))}
         assert col.find(filters).count() == 1
+
+
+class TestPipeLine(object):
+    def test_random_sample(self):
+        col.remove({})
+        col.insert([{"_id": i} for i in range(150)])
+        filters = {"_id": {"$lt": 120}}
+        pipeline = PipeLine.random_sample(filters, 3)
+        result = list(col.aggregate(pipeline))
+        assert len(result) == 3
+        for doc in result:
+            assert doc["_id"] < 120
 
 
 if __name__ == "__main__":
