@@ -7,6 +7,7 @@ python:
   - "3.6"
 
 install:
+  - pip install pandas
   - pip install --editable . # Install it self
   - pip install --upgrade pytest # Upgrade pytest to lastest
   - pip install --upgrade pytest-cov # Upgrade pytest-cov to latest
